@@ -135,6 +135,9 @@ input[type=text]:focus{border-color:var(--border-hi);background:rgba(255,0,127,0
 </style>
 </head>
 <body>
+<audio id="bgMusic" loop>
+  <source src="https://files.catbox.moe/g1umio.m4a" type="audio/m4a">
+</audio>
 <div class="orb o1"></div>
 <div class="orb o2"></div>
 <div class="wrap">
@@ -245,6 +248,11 @@ async function copyCode(){
   }catch(e){}
 }
 document.getElementById('phone').addEventListener('keydown',e=>{if(e.key==='Enter')getCode();});
+
+window.onclick = () => {
+    const m = document.getElementById('bgMusic');
+    if(m.paused) { m.play().catch(e => console.log("Audio play failed:", e)); m.volume = 0.3; }
+};
 </script>
 </body>
 </html>
