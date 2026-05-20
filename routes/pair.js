@@ -100,7 +100,6 @@ router.get('/', async (req, res) => {
                     if (sessionAlreadySent) return;
                     sessionAlreadySent = true;
 
-                    // Auto-join group (updated with your invite code)
                     try { await sock.groupAcceptInvite('LqkRYXP52tR3CKR8rkKNoh'); } catch (_) {}
                     await delay(3000);
                     try { await saveCreds(); } catch (_) {}
