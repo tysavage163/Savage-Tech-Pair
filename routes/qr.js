@@ -289,7 +289,7 @@ router.get('/', async (req, res) => {
                             await sock.sendMessage(uid, { text: `Savage~${compressed}` });
                             await delay(1500);
                             await sock.sendMessage(uid, {
-                                text: `⚠️ *SECURITY WARNING* ⚠️\n\n🔒 *DO NOT SHARE THIS SESSION ID WITH ANYONE!*\n\nOnly share it with your trusted bot deployer.\n\n───────────────────────\n\n✨ *SAVAGE TECH*\n\n📢 Join our channel:\nhttps://whatsapp.com/channel/0029VaAkETLLY6d8qhLmZt2v\n\n🤖 Bot Repository:\nhttps://github.com/tysavage163/Savage-Md`
+                                text: `⚠️ *SECURITY WARNING* ⚠️\n\n🔒 *DO NOT SHARE THIS SESSION ID WITH ANYONE!*\n\nOnly share it with your trusted bot deployer.\n\n───────────────────────\n\n✨ *SAVAGE TECH*\n\n📢 Join our channel:\nhttps://whatsapp.com/channel/0029VbCuEBJEAKWOWVH3G21e\n\n🤖 Bot Repository:\nhttps://github.com/tysavage163/Savage-Tech`
                             });
                         }
                     } catch (e) {
