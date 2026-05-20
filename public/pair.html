@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>SAVAGE TECH — Pairing Code</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#ff007f;
+  --accent-dim:rgba(255,0,127,0.12);
+  --accent-glow:rgba(255,0,127,0.2);
+  --secondary:#ff66b5;
+  --bg:#0a0a0c;
+  --glass:rgba(10,10,12,0.9);
+  --glass2:rgba(255,255,255,0.04);
+  --border:rgba(255,0,127,0.2);
+  --border-hi:rgba(255,0,127,0.4);
+  --t1:#f1f0ff;
+  --t2:#b0b0b8;
+  --t3:#5a5a6e;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Orbitron',sans-serif;
+  background:var(--bg);color:var(--t1);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;overflow-x:hidden;
+}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;}
+.o1{width:700px;height:700px;background:rgba(255,0,127,0.1);top:-250px;right:-150px;}
+.o2{width:500px;height:500px;background:rgba(255,0,127,0.06);bottom:-150px;left:-100px;}
+.wrap{position:relative;z-index:10;width:100%;max-width:460px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:9px;
+  background:var(--glass);border:1px solid var(--border);
+  color:var(--t2);text-decoration:none;font-size:.8rem;font-weight:500;
+  transition:all .2s;
+}
+.back-btn:hover{color:var(--t1);border-color:var(--border-hi);}
+.alt-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:9px;
+  background:rgba(255,0,127,0.08);border:1px solid rgba(255,0,127,0.2);
+  color:var(--accent);text-decoration:none;font-size:.8rem;font-weight:600;
+}
+.alt-btn:hover{background:rgba(255,0,127,0.15);}
+.card{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:22px;overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.7);
+  animation:cardUp .45s ease both;
+}
+@keyframes cardUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.card-head{
+  padding:26px 28px 22px;
+  background:linear-gradient(150deg,rgba(255,0,127,0.08) 0%,transparent 60%);
+  border-bottom:1px solid var(--border);
+}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 11px;border-radius:100px;
+  background:var(--accent-dim);border:1px solid rgba(255,0,127,0.22);
+  color:var(--accent);font-size:.68rem;font-weight:700;
+  font-family:'JetBrains Mono',monospace;margin-bottom:13px;
+}
+.chip-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.card-title{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;margin-bottom:5px;}
+.card-sub{font-size:.84rem;color:var(--t2);line-height:1.6;}
+.card-body{padding:26px 28px;}
+.progress{display:flex;margin-bottom:26px;position:relative;}
+.progress::before{content:'';position:absolute;top:12px;left:12.5%;right:12.5%;height:1px;background:var(--border);}
+.p-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;}
+.p-circle{
+  width:25px;height:25px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.62rem;font-weight:700;font-family:'JetBrains Mono',monospace;
+  border:1px solid var(--border);background:var(--bg);color:var(--t3);
+  transition:all .3s;margin-bottom:5px;
+}
+.p-circle.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);box-shadow:0 0 12px var(--accent-glow);}
+.p-circle.done{background:var(--accent);border-color:var(--accent);color:#0a0a0c;}
+.p-lbl{font-size:.6rem;color:var(--t3);text-align:center;font-weight:500;}
+.p-lbl.active{color:var(--accent);}
+.f-group{margin-bottom:18px;}
+.f-label{display:block;font-size:.8rem;font-weight:600;color:var(--t2);margin-bottom:7px;}
+.f-wrap{position:relative;}
+.f-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:.82rem;}
+input[type=text]{
+  width:100%;padding:13px 14px 13px 38px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:11px;color:var(--t1);
+  font-family:'JetBrains Mono',monospace;font-size:.92rem;
+  outline:none;transition:all .2s;
+}
+input[type=text]:focus{border-color:var(--border-hi);background:rgba(255,0,127,0.05);box-shadow:0 0 0 3px rgba(255,0,127,0.1);}
+.f-hint{font-size:.72rem;color:var(--t3);margin-top:5px;}
+.submit-btn{
+  width:100%;padding:14px;border-radius:11px;
+  background:var(--accent);border:none;cursor:pointer;
+  color:#0a0a0c;font-family:'Orbitron',sans-serif;
+  font-size:.9rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .25s;box-shadow:0 0 28px rgba(255,0,127,0.2);
+}
+.submit-btn:hover:not(:disabled){background:#ff4da6;transform:translateY(-2px);box-shadow:0 0 44px rgba(255,0,127,0.3);}
+.submit-btn:disabled{opacity:.45;cursor:not-allowed;}
+.status{margin-top:14px;padding:11px 14px;border-radius:10px;font-size:.82rem;display:none;align-items:center;gap:8px;}
+.status.show{display:flex;}
+.status.error{background:rgba(255,0,127,0.08);border:1px solid rgba(255,0,127,0.2);color:#ff80bf;}
+.status.loading{background:var(--accent-dim);border:1px solid rgba(255,0,127,0.15);color:var(--accent);}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,0,127,0.2);border-top-color:var(--accent);animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.code-box{margin-top:20px;background:rgba(255,0,127,0.03);border:1px solid rgba(255,0,127,0.18);border-radius:14px;padding:20px;display:none;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.code-box.show{display:block;}
+.code-lbl{font-size:.67rem;color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:700;margin-bottom:10px;}
+.code-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+.code-val{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--accent);letter-spacing:.14em;word-break:break-all;}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:9px;background:var(--accent-dim);border:1px solid rgba(255,0,127,0.22);color:var(--accent);font-size:.76rem;font-weight:600;cursor:pointer;}
+.code-info{padding:10px 12px;border-radius:9px;background:rgba(255,0,127,0.05);border:1px solid rgba(255,0,127,0.15);font-size:.79rem;color:var(--accent);display:flex;gap:7px;line-height:1.55;}
+.wa-steps{display:flex;flex-direction:column;gap:7px;margin-top:14px;}
+.wa-step{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;background:var(--glass2);border:1px solid var(--border);font-size:.78rem;color:var(--t2);}
+.wa-n{width:20px;height:20px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(255,0,127,0.18);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:var(--accent);}
+.waiting{margin-top:18px;border-radius:14px;padding:22px;background:var(--glass);border:1px solid var(--border);display:none;text-align:center;}
+.waiting.show{display:block;}
+.w-icon{font-size:2.2rem;margin-bottom:10px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.w-title{font-size:.92rem;font-weight:700;margin-bottom:4px;}
+.w-sub{font-size:.79rem;color:var(--t2);line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back-btn" href="/"><i class="fas fa-arrow-left"></i> Home</a>
+    <a class="alt-btn" href="/qr"><i class="fas fa-qrcode"></i> Use QR Instead</a>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <div class="chip"><span class="chip-dot"></span> PAIRING CODE AUTH</div>
+      <h1 class="card-title">Link Your WhatsApp</h1>
+      <p class="card-sub">Enter your number to get an 8-digit pairing code. No camera scan needed.</p>
+    </div>
+    <div class="card-body">
+      <div class="progress">
+        <div class="p-step"><div class="p-circle active" id="c1">1</div><div class="p-lbl active" id="l1">Number</div></div>
+        <div class="p-step"><div class="p-circle" id="c2">2</div><div class="p-lbl" id="l2">Code</div></div>
+        <div class="p-step"><div class="p-circle" id="c3">3</div><div class="p-lbl" id="l3">WhatsApp</div></div>
+        <div class="p-step"><div class="p-circle" id="c4">4</div><div class="p-lbl" id="l4">Session</div></div>
+      </div>
+      <div id="formSection">
+        <div class="f-group">
+          <label class="f-label" for="phone">Phone Number</label>
+          <div class="f-wrap">
+            <span class="f-icon"><i class="fas fa-phone"></i></span>
+            <input type="text" id="phone" placeholder="2547XXXXXXXX" autocomplete="tel" inputmode="numeric">
+          </div>
+          <div class="f-hint"><i class="fas fa-circle-info"></i> Include country code without + (e.g. 254712345678)</div>
+        </div>
+        <button class="submit-btn" id="submitBtn" onclick="getCode()"><i class="fas fa-bolt"></i> Generate Pairing Code</button>
+      </div>
+      <div class="status loading" id="loadingMsg"><div class="spin"></div><span>Connecting to WhatsApp servers...</span></div>
+      <div class="status error" id="errorMsg"><i class="fas fa-triangle-exclamation"></i><span id="errorText"></span></div>
+      <div class="code-box" id="codeBox">
+        <div class="code-lbl">YOUR PAIRING CODE</div>
+        <div class="code-row"><div class="code-val" id="codeVal">----</div><button class="copy-btn" onclick="copyCode()"><i class="fas fa-copy"></i> Copy</button></div>
+        <div class="code-info"><i class="fas fa-circle-info"></i><span>Open WhatsApp → Menu → Linked Devices → Link a Device → Link with phone number → enter this code</span></div>
+        <div class="wa-steps">
+          <div class="wa-step"><div class="wa-n">1</div>Open WhatsApp on your phone</div>
+          <div class="wa-step"><div class="wa-n">2</div>Tap ⋮ Menu → Settings → Linked Devices</div>
+          <div class="wa-step"><div class="wa-n">3</div>Tap "Link a Device" → "Link with phone number"</div>
+          <div class="wa-step"><div class="wa-n">4</div>Enter the code above → session arrives in DM</div>
+        </div>
+      </div>
+      <div class="waiting" id="waitingBox"><div class="w-icon">📱</div><div class="w-title">Waiting for WhatsApp...</div><div class="w-sub">Enter the code on your phone.<br>Your session ID will arrive in your WhatsApp DM automatically.</div></div>
+    </div>
+  </div>
+</div>
+<script>
+async function getCode(){
+  const phone=document.getElementById('phone').value.trim().replace(/[^0-9]/g,'');
+  const btn=document.getElementById('submitBtn');
+  const loading=document.getElementById('loadingMsg');
+  const errBox=document.getElementById('errorMsg');
+  if(!phone||phone.length<7){showError('Please enter a valid phone number with country code.');return;}
+  btn.disabled=true;
+  btn.innerHTML='<div class="spin" style="border-top-color:#0a0a0c"></div> Requesting code...';
+  loading.classList.add('show');
+  errBox.classList.remove('show');
+  setStep(1);
+  try{
+    const res=await fetch(`/code?number=${phone}`);
+    const data=await res.json();
+    loading.classList.remove('show');
+    btn.disabled=false;
+    btn.innerHTML='<i class="fas fa-bolt"></i> Generate Pairing Code';
+    if(data.code&&!data.code.toLowerCase().includes('service')&&!data.code.toLowerCase().includes('error')){
+      showCode(data.code);
+    }else{
+      showError(data.code||'Failed to generate code. Please try again.');
+    }
+  }catch(e){
+    loading.classList.remove('show');
+    btn.disabled=false;
+    btn.innerHTML='<i class="fas fa-bolt"></i> Generate Pairing Code';
+    showError('Network error. Check your connection and try again.');
+  }
+}
+function showCode(code){
+  document.getElementById('codeVal').textContent=code;
+  document.getElementById('codeBox').classList.add('show');
+  document.getElementById('waitingBox').classList.add('show');
+  setStep(2);
+  setTimeout(()=>setStep(3),8000);
+  setTimeout(()=>setStep(4),30000);
+}
+function setStep(n){
+  for(let i=1;i<=4;i++){
+    const c=document.getElementById('c'+i);
+    const l=document.getElementById('l'+i);
+    c.className='p-circle';l.className='p-lbl';
+    if(i<n){c.className='p-circle done';c.innerHTML='<i class="fas fa-check" style="font-size:.5rem"></i>';}
+    else if(i===n){c.className='p-circle active';c.innerHTML=i;l.className='p-lbl active';}
+    else{c.innerHTML=i;}
+  }
+}
+function showError(msg){
+  document.getElementById('errorText').textContent=msg;
+  document.getElementById('errorMsg').classList.add('show');
+}
+async function copyCode(){
+  const code=document.getElementById('codeVal').textContent;
+  try{
+    await navigator.clipboard.writeText(code);
+    const b=document.querySelector('.copy-btn');
+    b.innerHTML='<i class="fas fa-check"></i> Copied!';
+    setTimeout(()=>b.innerHTML='<i class="fas fa-copy"></i> Copy',2000);
+  }catch(e){}
+}
+document.getElementById('phone').addEventListener('keydown',e=>{if(e.key==='Enter')getCode();});
+</script>
+</body>
+</html>
