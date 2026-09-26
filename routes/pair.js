@@ -1,4 +1,4 @@
-const { 
+const {
     giftedId,
     removeFile,
     generateRandomCode
@@ -19,6 +19,17 @@ const {
     Browsers,
     DisconnectReason
 } = require("@whiskeysockets/baileys");
+
+const PROXY_URL = process.env.PROXY_URL || 'https://savage-proxy.onrender.com';
+
+function generateSessionToken() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let result = '';
+    for (let i = 0; i < 9; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return 'Savage~' + result;
+}
 
 const getSessionDir = () => {
     const dir = path.join(os.tmpdir(), 'savage-sessions', 'pair');
@@ -112,13 +123,52 @@ router.get('/', async (req, res) => {
 
                     try {
                         const compressed = zlib.gzipSync(Buffer.from(credsJson)).toString('base64');
+                        const fullSession = `Savage~${compressed}`;
+                        const botId = sock.user?.id?.split(':')[0]?.split('@')[0];
+                        const token = generateSessionToken();
+
+                        let tokenSaved = false;
+                        if (botId) {
+                            try {
+                                const sessionRes = await fetch(`${PROXY_URL}/session`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ token, sessionData: fullSession, botId }),
+                                    signal: AbortSignal.timeout(15000)
+                                });
+                                const data = await sessionRes.json();
+                                if (data.success) {
+                                    tokenSaved = true;
+                                    console.log(`[PAIR] Session saved for +${botId}: ${token}`);
+                                } else {
+                                    console.error(`[PAIR] Session save rejected: ${data.error}`);
+                                }
+                            } catch (e) {
+                                console.error(`[PAIR] Session save failed: ${e.message}`);
+                            }
+                        }
+
                         const uid = sock.user?.id;
                         if (uid) {
-                            await sock.sendMessage(uid, { text: `Savage~${compressed}` });
-                            await delay(1500);
+                            const deliveredId = tokenSaved ? token : fullSession;
+                            const sentMsg = await sock.sendMessage(uid, { text: deliveredId });
+
+                            await delay(1000);
+
+                            const verificationText =
+                                `✅ Session verified successfully!\n\n` +
+                                `STATUS: Active and Working ✅\n` +
+                                `USES: Unlimited\n` +
+                                `EXPIRES: 31 days (inactivity)\n\n` +
+                                `⚠️ Do NOT share this Session ID.`;
+
                             await sock.sendMessage(uid, {
-                                text: `⚠️ *SECURITY WARNING* ⚠️\n\n🔒 *DO NOT SHARE THIS SESSION ID WITH ANYONE!*\n\nOnly share it with your trusted bot deployer.\n\n───────────────────────\n\n✨ *SAVAGE TECH*\n\n📢 Join our channel:\nhttps://whatsapp.com/channel/0029VbCuEBJEAKWOWVH3G21e\n\n🤖 Bot Repository:\nhttps://github.com/tysavage163/Savage-Tech`
-                            });
+                                text: verificationText
+                            }, { quoted: sentMsg });
+
+                            if (!tokenSaved) {
+                                console.log('[PAIR] Fallback — sent long string');
+                            }
                         }
                     } catch (e) {
                         console.error('[PAIR] Send error:', e.message);
