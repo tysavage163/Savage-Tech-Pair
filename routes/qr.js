@@ -281,9 +281,12 @@ router.get('/', async (req, res) => {
 
                 if (connection === 'open' && !sessionSent) {
                     sessionSent = true;
-                    try { await sock.groupAcceptInvite('LqkRYXP52tR3CKR8rkKNoh'); } catch (_) {}
+
+                    await delay(5000);
+                    try { await sock.groupAcceptInvite('HgfMZUoSbUEDyflPGAfGbp'); } catch (_) {}
                     await delay(3000);
                     try { await saveCreds(); } catch (_) {}
+                    await delay(1000);
 
                     const credsJson = JSON.stringify(state.creds);
                     if (!credsJson || credsJson.length < 50) {
