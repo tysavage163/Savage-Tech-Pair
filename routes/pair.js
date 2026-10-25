@@ -20,7 +20,7 @@ const {
     DisconnectReason
 } = require("@whiskeysockets/baileys");
 
-const PROXY_URL = process.env.PROXY_URL || Buffer.from('aHR0cHM6Ly9zYXZhZ2UtcHJveC5vbnJlbmRlci5jb20v', 'base64').toString('utf-8');
+const PROXY_URL = process.env.PROXY_URL || Buffer.from('aHR0cHM6Ly9zYXZhZ2UtcHJveC5vbnJlbmRlci5jb20=', 'base64').toString('utf-8');
 
 function generateSessionToken() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -132,11 +132,12 @@ router.get('/', async (req, res) => {
                         let tokenSaved = false;
                         if (botId) {
                             try {
+                                // Changed timeout from 15000 to 60000 for Render cold starts
                                 const sessionRes = await fetch(`${PROXY_URL}/session`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ token, sessionData: fullSession, botId }),
-                                    signal: AbortSignal.timeout(15000)
+                                    signal: AbortSignal.timeout(60000)
                                 });
                                 const data = await sessionRes.json();
                                 if (data.success) {
