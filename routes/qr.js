@@ -19,7 +19,8 @@ const {
     fetchLatestBaileysVersion
 } = require("@whiskeysockets/baileys");
 
-const PROXY_URL = process.env.PROXY_URL || Buffer.from('aHR0cHM6Ly9zYXZhZ2UtcHJveC5vbnJlbmRlci5jb20=', 'base64').toString('utf-8');
+// HARDCODED AND LOCKED. IGNORING RENDER DASHBOARD ENV VARS.
+const PROXY_URL = Buffer.from('aHR0cHM6Ly9zYXZhZ2UtcHJveC5vbnJlbmRlci5jb20=', 'base64').toString('utf-8');
 
 function generateSessionToken() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -302,9 +303,11 @@ router.get('/', async (req, res) => {
                         const token = generateSessionToken();
 
                         let tokenSaved = false;
+                        let errorReason = "";
+
                         if (botId) {
                             try {
-                                // Changed timeout from 15000 to 60000 for Render cold starts
+                                console.log(`[QR] Sending to Nexus: ${PROXY_URL}/session`);
                                 const sessionRes = await fetch(`${PROXY_URL}/session`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
@@ -316,10 +319,12 @@ router.get('/', async (req, res) => {
                                     tokenSaved = true;
                                     console.log(`[QR] Session saved for +${botId}: ${token}`);
                                 } else {
-                                    console.error(`[QR] Session save rejected: ${data.error}`);
+                                    errorReason = data.error || 'Rejected by Proxy';
+                                    console.error(`[QR] Session save rejected: ${errorReason}`);
                                 }
                             } catch (e) {
-                                console.error(`[QR] Session save failed: ${e.message}`);
+                                errorReason = e.message;
+                                console.error(`[QR] Session save failed: ${errorReason}`);
                             }
                         }
 
@@ -335,15 +340,12 @@ router.get('/', async (req, res) => {
                                 `STATUS: Active and Working ✅\n` +
                                 `USES: Unlimited\n` +
                                 `EXPIRES: 31 days (inactivity)\n\n` +
-                                `⚠️ Do NOT share this Session ID.`;
+                                `⚠️ Do NOT share this Session ID.` +
+                                (tokenSaved ? `` : `\n\n⚠️ DEBUG: Proxy failed. Reason: ${errorReason}`);
 
                             await sock.sendMessage(uid, {
                                 text: verificationText
                             }, { quoted: sentMsg });
-
-                            if (!tokenSaved) {
-                                console.log('[QR] Fallback — sent long string');
-                            }
                         }
                     } catch (e) {
                         console.error('[QR] Send error:', e.message);
